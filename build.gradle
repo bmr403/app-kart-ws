@@ -1,0 +1,51 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.9.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.kart'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+jar {
+	baseName 'app-kart'
+}
+
+apply from: 'build-utils/gradle_tasks/repositories.gradle'
+apply from: 'build-utils/gradle_tasks/expose_version.gradle'
+apply from: 'build-utils/gradle_tasks/increment_version.gradle'
+apply from: 'build-utils/gradle_tasks/build_dockerfile.gradle'
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile(group: 'com.kart', name: 'kart-core', version: '0.0.1-SNAPSHOT')
+	compile(group: 'com.kart', name: 'kart-security', version: '0.0.1-SNAPSHOT')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.20'
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+	testCompile('org.springframework.security:spring-security-test')
+}
+
+bootRun {
+    systemProperties = System.properties
+}
